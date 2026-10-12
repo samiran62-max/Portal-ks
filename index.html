@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Portal Aplikasi Spensaka</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+  </style>
+</head>
+<body class="bg-slate-50 min-h-screen py-10 px-4">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="text-center mb-10">
+      <h1 class="text-3xl font-bold text-slate-800 mb-2">Portal Layanan & Aplikasi Sekolah</h1>
+      <p class="text-slate-600">Akses cepat seluruh layanan terpadu SMPN 1 Kandat</p>
+    </div>
+
+    <!-- Tampilan Loading -->
+    <div id="loading" class="text-center text-slate-500 py-12">
+      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-blue-600 mb-3"></div>
+      <p class="text-sm">Memuat daftar aplikasi dari Spreadsheet...</p>
+    </div>
+
+    <!-- Grid Tempat Kartu Aplikasi -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden" id="appGrid"></div>
+
+    <!-- Footer -->
+    <div class="text-center mt-12 text-xs text-slate-400">
+      &copy; SMP Negeri 1 Kandat. All rights reserved.
+    </div>
+  </div>
+
+  <script>
+    // URL Web App Google Apps Script milik Anda
+    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwqrVrokOh80FdJqxri2ytKJebuwCrqWkNm-xxGnt6BEQI64MqvnGwHGNhUZLJV4g/exec";
+
+    async function loadApps() {
+      try {
+        const response = await fetch(SCRIPT_URL);
+        const apps = await response.json();
+        
+        const gridContainer = document.getElementById('appGrid');
+        const loadingEl = document.getElementById('loading');
+        
+        gridContainer.innerHTML = '';
+
+        if (!apps || apps.length === 0) {
+          loadingEl.innerHTML = '<p class="text-slate-500">Belum ada data aplikasi di spreadsheet.</p>';
+          return;
+        }
+
+        apps.forEach(app => {
+          const card = document.createElement('a');
+          card.href = app.link || '#';
+          card.target = '_blank';
+          card.className = 'p-6 rounded-2xl shadow-sm border border-black/5 hover:shadow-md transition-all transform hover:-translate-y-1 block flex flex-col justify-between';
+          card.style.backgroundColor = app.warna || '#FFFFFF';
+
+          card.innerHTML = `
+            <div>
+              <div class="text-4xl mb-4">${app.emoji || '🔗'}</div>
+              <h2 class="text-xl font-bold text-slate-800 mb-2">${app.nama}</h2>
+              <p class="text-sm text-slate-700">${app.subtitle || ''}</p>
+            </div>
+            <div class="mt-6 text-xs font-semibold text-slate-800/80 flex items-center gap-1">
+              Buka Aplikasi &rarr;
+            </div>
+          `;
+          gridContainer.appendChild(card);
+        });
+
+        loadingEl.classList.add('hidden');
+        gridContainer.classList.remove('hidden');
+      } catch (error) {
+        console.error('Gagal mengambil data:', error);
+        document.getElementById('loading').innerHTML = '<p class="text-red-500 font-medium">Gagal memuat data aplikasi. Pastikan izin Google Apps Script di-set ke "Siapa saja (Anyone)".</p>';
+      }
+    }
+
+    loadApps();
+  </script>
+</body>
+</html>

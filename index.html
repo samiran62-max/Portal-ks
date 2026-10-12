@@ -13,22 +13,22 @@
 </head>
 <body class="bg-slate-600 min-h-screen flex items-center justify-center font-sans">
 
-  <!-- ================= HALAMAN LOGIN ================= -->
+  <!-- ================= 1. HALAMAN LOGIN ================= -->
   <div id="loginScreen" class="w-full max-w-md p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 text-center border border-slate-100">
       
-      <!-- Logo Sekolah -->
+      <!-- Logo Sekolah (Diperbarui dengan Gambar) -->
       <div class="flex justify-center mb-4">
-        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100 shadow-inner">
-          <span class="text-3xl">🏫</span>
-        </div>
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s" 
+             alt="Logo Sekolah" 
+             class="h-20 w-auto object-contain">
       </div>
 
-      <!-- Judul & Subtitle Login -->
+      <!-- Judul Login -->
       <h1 class="text-xl font-extrabold text-slate-800 tracking-wide uppercase mb-1">PORTAL KEPALA SEKOLAH</h1>
       <p class="text-xs text-slate-500 mb-6">Silakan login untuk mengakses aplikasi</p>
 
-      <!-- Pesan Error Error jika salah pass -->
+      <!-- Pesan Error -->
       <div id="errorMessage" class="hidden mb-4 p-3 bg-red-50 border border-red-200 text-red-600 text-xs rounded-xl text-left">
         ⚠️ Username atau password salah!
       </div>
@@ -56,28 +56,33 @@
   </div>
 
 
-  <!-- ================= HALAMAN PORTAL APLIKASI ================= -->
+  <!-- ================= 2. HALAMAN PORTAL APLIKASI ================= -->
   <div id="portalContent" class="hidden w-full min-h-screen bg-slate-50 py-10 px-4">
     <div class="max-w-5xl mx-auto">
       
       <!-- Header dengan Tombol Keluar -->
       <div class="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4 border-b border-slate-200 pb-6">
-        <div class="text-center sm:text-left">
-          <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">Portal Layanan & Aplikasi Sekolah</h1>
-          <p class="text-slate-600 text-sm">Akses cepat seluruh layanan terpadu SMPN 1 Kandat</p>
+        <div class="flex items-center gap-4 text-center sm:text-left">
+          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s" 
+               alt="Logo Sekolah" 
+               class="h-14 w-auto object-contain hidden sm:block">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">Portal Layanan & Aplikasi Sekolah</h1>
+            <p class="text-slate-600 text-sm">Akses cepat seluruh layanan terpadu SMPN 1 Kandat</p>
+          </div>
         </div>
         <button onclick="handleLogout()" class="text-xs bg-slate-200 hover:bg-red-100 hover:text-red-600 text-slate-700 px-4 py-2 rounded-xl transition-all font-semibold flex items-center gap-1.5">
           <span>🚪</span> Keluar
         </button>
       </div>
 
-      <!-- Loading State -->
+      <!-- Tampilan Loading -->
       <div id="loading" class="text-center text-slate-500 py-12">
         <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-slate-300 border-t-blue-600 mb-3"></div>
         <p class="text-sm">Memuat daftar aplikasi dari Spreadsheet...</p>
       </div>
 
-      <!-- Grid Tempat Kartu Aplikasi -->
+      <!-- Grid Aplikasi -->
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden" id="appGrid"></div>
 
       <!-- Footer -->
@@ -88,9 +93,9 @@
   </div>
 
 
-  <!-- ================= SCRIPT LOGIKA LOGIN & API ================= -->
+  <!-- ================= 3. SCRIPT LOGIKA LOGIN & AMBIL DATA ================= -->
   <script>
-    // URL Web App Google Apps Script Anda
+    // URL Google Apps Script dari akun Workspace (guru.smp.belajar.id)
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJIu0weg6REkQ9TWN1EEc9G8gaeHj9KLpm_KQ5N2DdT3WzroP-No-m5eZLgA9bec4/exec";
 
     // Cek status login saat halaman dibuka
@@ -100,7 +105,7 @@
       }
     };
 
-    // Proses Logik Login (User: ks , Password: ks)
+    // Fungsi Login (Username: ks | Password: ks)
     function handleLogin(event) {
       event.preventDefault();
       const userVal = document.getElementById("username").value.trim();
@@ -116,7 +121,7 @@
       }
     }
 
-    // Proses Logout
+    // Fungsi Logout
     function handleLogout() {
       sessionStorage.removeItem("isLoggedIn");
       document.body.className = "bg-slate-600 min-h-screen flex items-center justify-center font-sans";
@@ -134,50 +139,56 @@
       loadApps();
     }
 
-    // Fetch Data Aplikasi dari Spreadsheet
+    // Ambil Data Aplikasi dari Google Spreadsheet
     async function loadApps() {
       const gridContainer = document.getElementById('appGrid');
       const loadingEl = document.getElementById('loading');
 
-      if (gridContainer.children.length > 0) return; // Mencegah load berulang
+      if (gridContainer.children.length > 0) return;
+
+      let apps = null;
 
       try {
-        const response = await fetch(SCRIPT_URL);
-        const apps = await response.json();
-
-        gridContainer.innerHTML = '';
-
-        if (!apps || apps.length === 0) {
-          loadingEl.innerHTML = '<p class="text-slate-500">Belum ada data aplikasi di spreadsheet.</p>';
-          return;
+        const res = await fetch(SCRIPT_URL_PRIMARY);
+        apps = await res.json();
+      } catch (err1) {
+        try {
+          const res = await fetch(SCRIPT_URL_SECONDARY);
+          apps = await res.json();
+        } catch (err2) {
+          console.error('Gagal mengambil data:', err2);
         }
-
-        apps.forEach(app => {
-          const card = document.createElement('a');
-          card.href = app.link || '#';
-          card.target = '_blank';
-          card.className = 'p-6 rounded-2xl shadow-sm border border-black/5 hover:shadow-md transition-all transform hover:-translate-y-1 block flex flex-col justify-between';
-          card.style.backgroundColor = app.warna || '#FFFFFF';
-
-          card.innerHTML = `
-            <div>
-              <div class="text-4xl mb-4">${app.emoji || '🔗'}</div>
-              <h2 class="text-xl font-bold text-slate-800 mb-2">${app.nama}</h2>
-              <p class="text-sm text-slate-700">${app.subtitle || ''}</p>
-            </div>
-            <div class="mt-6 text-xs font-semibold text-slate-800/80 flex items-center gap-1">
-              Buka Aplikasi &rarr;
-            </div>
-          `;
-          gridContainer.appendChild(card);
-        });
-
-        loadingEl.classList.add('hidden');
-        gridContainer.classList.remove('hidden');
-      } catch (error) {
-        console.error('Gagal mengambil data:', error);
-        loadingEl.innerHTML = '<p class="text-red-500 font-medium">Gagal memuat data aplikasi. Pastikan izin Google Apps Script di-set ke "Siapa saja (Anyone)".</p>';
       }
+
+      if (!apps || apps.length === 0) {
+        loadingEl.innerHTML = '<p class="text-red-500 font-medium">Gagal memuat data aplikasi. Pastikan pengaturan akses di Apps Script sudah di-set ke "Siapa saja (Anyone)".</p>';
+        return;
+      }
+
+      gridContainer.innerHTML = '';
+
+      apps.forEach(app => {
+        const card = document.createElement('a');
+        card.href = app.link || '#';
+        card.target = '_blank';
+        card.className = 'p-6 rounded-2xl shadow-sm border border-black/5 hover:shadow-md transition-all transform hover:-translate-y-1 block flex flex-col justify-between';
+        card.style.backgroundColor = app.warna || '#FFFFFF';
+
+        card.innerHTML = `
+          <div>
+            <div class="text-4xl mb-4">${app.emoji || '🔗'}</div>
+            <h2 class="text-xl font-bold text-slate-800 mb-2">${app.nama}</h2>
+            <p class="text-sm text-slate-700">${app.subtitle || ''}</p>
+          </div>
+          <div class="mt-6 text-xs font-semibold text-slate-800/80 flex items-center gap-1">
+            Buka Aplikasi &rarr;
+          </div>
+        `;
+        gridContainer.appendChild(card);
+      });
+
+      loadingEl.classList.add('hidden');
+      gridContainer.classList.remove('hidden');
     }
   </script>
 </body>

@@ -17,11 +17,11 @@
   <div id="loginScreen" class="w-full max-w-md p-4">
     <div class="bg-white rounded-2xl shadow-2xl p-8 text-center border border-slate-100">
       
-      <!-- Logo Sekolah (Diperbarui dengan Gambar) -->
+      <!-- Logo Sekolah -->
       <div class="flex justify-center mb-4">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s" 
-             alt="Logo Sekolah" 
-             class="h-20 w-auto object-contain">
+        <div class="w-16 h-16 rounded-full bg-blue-50 flex items-center justify-center border border-blue-100 shadow-inner">
+          <span class="text-3xl">🏫</span>
+        </div>
       </div>
 
       <!-- Judul Login -->
@@ -62,14 +62,9 @@
       
       <!-- Header dengan Tombol Keluar -->
       <div class="flex flex-col sm:flex-row justify-between items-center mb-10 gap-4 border-b border-slate-200 pb-6">
-        <div class="flex items-center gap-4 text-center sm:text-left">
-          <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s" 
-               alt="Logo Sekolah" 
-               class="h-14 w-auto object-contain hidden sm:block">
-          <div>
-            <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">Portal Layanan & Aplikasi Sekolah</h1>
-            <p class="text-slate-600 text-sm">Akses cepat seluruh layanan terpadu SMPN 1 Kandat</p>
-          </div>
+        <div class="text-center sm:text-left">
+          <h1 class="text-2xl sm:text-3xl font-bold text-slate-800 mb-1">Portal Layanan & Aplikasi Sekolah</h1>
+          <p class="text-slate-600 text-sm">Akses cepat seluruh layanan terpadu SMPN 1 Kandat</p>
         </div>
         <button onclick="handleLogout()" class="text-xs bg-slate-200 hover:bg-red-100 hover:text-red-600 text-slate-700 px-4 py-2 rounded-xl transition-all font-semibold flex items-center gap-1.5">
           <span>🚪</span> Keluar
@@ -96,7 +91,8 @@
   <!-- ================= 3. SCRIPT LOGIKA LOGIN & AMBIL DATA ================= -->
   <script>
     // URL Google Apps Script dari akun Workspace (guru.smp.belajar.id)
-    const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJIu0weg6REkQ9TWN1EEc9G8gaeHj9KLpm_KQ5N2DdT3WzroP-No-m5eZLgA9bec4/exec";
+    const SCRIPT_URL_PRIMARY = "https://script.google.com/a/macros/guru.smp.belajar.id/s/AKfycbwqrVrokOh80FdJqxri2ytKJebuwCrqWkNm-xxGnt6BEQI64MqvnGwHGNhUZLJV4g/exec";
+    const SCRIPT_URL_SECONDARY = "https://script.google.com/macros/s/AKfycbwqrVrokOh80FdJqxri2ytKJebuwCrqWkNm-xxGnt6BEQI64MqvnGwHGNhUZLJV4g/exec";
 
     // Cek status login saat halaman dibuka
     window.onload = function() {
@@ -148,6 +144,7 @@
 
       let apps = null;
 
+      // Coba ambil dari URL Primary, jika gagal coba URL Secondary
       try {
         const res = await fetch(SCRIPT_URL_PRIMARY);
         apps = await res.json();

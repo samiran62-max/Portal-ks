@@ -4,53 +4,60 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Portal Kepala Sekolah</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     body {
-      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
     }
+    input::placeholder { color: #64748b; opacity: 1; }
+    input { color: #0f172a; }
   </style>
 </head>
-<body class="bg-blue-950 text-white min-h-screen flex flex-col justify-center items-center">
+<body class="bg-slate-700 min-h-screen flex flex-col justify-center items-center">
 
   <!-- ================= LAYAR LOGIN ================= -->
-  <div id="loginScreen" class="w-full max-w-md p-6 sm:p-8 bg-blue-900/90 rounded-3xl shadow-2xl border border-blue-700 mx-4 my-8">
+  <div id="loginScreen" class="w-full max-w-md p-6 sm:p-8 bg-white rounded-3xl shadow-2xl mx-4 my-8">
     <!-- Logo -->
     <div class="flex justify-center mb-4">
-      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s" 
-           alt="Logo Sekolah" class="h-16 w-auto object-contain bg-white/20 p-2 rounded-2xl">
+      <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s"
+           alt="Logo Sekolah" class="h-20 w-auto object-contain">
     </div>
 
     <!-- Judul -->
     <div class="text-center mb-6">
-      <h1 class="text-xl font-extrabold text-white tracking-wide">PORTAL KEPALA SEKOLAH</h1>
-      <p class="text-xs text-blue-200 mt-1">Silakan login untuk mengakses aplikasi</p>
+      <h1 class="text-2xl font-extrabold text-slate-900 tracking-wide">PORTAL KEPALA SEKOLAH</h1>
+      <p class="text-sm text-slate-600 mt-2">Silakan login untuk mengakses aplikasi</p>
     </div>
 
     <!-- Form Login -->
-    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-4">
+    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-5">
       <!-- Alert Error -->
-      <div id="errorMessage" class="hidden p-3 bg-red-600 border border-red-400 text-white text-xs rounded-xl text-center font-bold">
+      <div id="errorMessage" class="hidden p-3 bg-red-50 border border-red-300 text-red-700 text-sm rounded-xl text-center font-semibold">
         Username atau password salah!
       </div>
 
       <!-- Input Username -->
       <div>
-        <label for="username" class="block text-xs font-semibold text-blue-100 mb-1.5">Username</label>
-        <input type="text" id="username" required placeholder="Masukkan username"
-               class="w-full px-4 py-2.5 text-sm rounded-xl bg-blue-950 border border-blue-600 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all">
+        <label for="username" class="block text-sm font-semibold text-slate-800 mb-2">Username</label>
+        <input type="text" id="username" required placeholder="Masukkan username" autocomplete="username"
+               class="w-full px-4 py-3 text-base rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all">
       </div>
 
       <!-- Input Password -->
       <div>
-        <label for="password" class="block text-xs font-semibold text-blue-100 mb-1.5">Password</label>
-        <input type="password" id="password" required placeholder="Masukkan password"
-               class="w-full px-4 py-2.5 text-sm rounded-xl bg-blue-950 border border-blue-600 text-white placeholder-blue-300 focus:outline-none focus:ring-2 focus:ring-blue-400 transition-all">
+        <label for="password" class="block text-sm font-semibold text-slate-800 mb-2">Password</label>
+        <input type="password" id="password" required placeholder="Masukkan password" autocomplete="current-password"
+               class="w-full px-4 py-3 text-base rounded-xl border border-slate-300 bg-white focus:outline-none focus:ring-2 focus:ring-blue-600 focus:border-transparent transition-all">
       </div>
 
       <!-- Tombol Login -->
-      <button type="submit" 
-              class="w-full py-3 px-4 bg-blue-500 hover:bg-blue-400 text-white font-bold text-sm rounded-xl shadow-lg transition-all duration-200 mt-2">
+      <button type="submit"
+              class="w-full py-3.5 px-4 bg-blue-700 hover:bg-blue-800 text-white font-bold text-base rounded-xl shadow-md transition-all duration-200 mt-2">
         Masuk Portal
       </button>
     </form>
@@ -59,17 +66,17 @@
   <!-- ================= DASHBOARD PORTAL (SETELAH LOGIN) ================= -->
   <div id="dashboardScreen" class="hidden w-full max-w-5xl mx-auto py-10 px-4">
     <!-- Header Dashboard -->
-    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-lg mb-8 gap-4 border-2 border-blue-400">
+    <div class="flex flex-col sm:flex-row justify-between items-center bg-white p-6 rounded-2xl shadow-sm mb-8 border border-slate-200 gap-4">
       <div class="flex items-center gap-4">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s" 
-             alt="Logo Sekolah" class="h-12 w-auto">
+        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRESVnGGzgEIkf9q6nFxX3TJ2oCPb2g8wWhobdhB6didA&s"
+             alt="Logo Sekolah" class="h-14 w-auto">
         <div>
-          <h1 class="text-2xl font-bold text-slate-900">Portal Layanan & Aplikasi</h1>
-          <p class="text-xs text-slate-600 font-medium">Akses terpadu Kepala Sekolah SMPN 1 Kandat</p>
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900">Portal Layanan &amp; Aplikasi</h1>
+          <p class="text-sm text-slate-600 mt-0.5">Akses terpadu Kepala Sekolah SMPN 1 Kandat</p>
         </div>
       </div>
-      <button onclick="handleLogout()" 
-              class="px-4 py-2 bg-red-600 hover:bg-red-700 text-white text-xs font-bold rounded-xl transition-all flex items-center gap-1.5 shadow">
+      <button onclick="handleLogout()"
+              class="px-5 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 text-sm font-bold rounded-xl border border-red-300 transition-all flex items-center gap-2">
         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/></svg>
         Keluar
       </button>
@@ -77,15 +84,15 @@
 
     <!-- Tampilan Loading -->
     <div id="loading" class="text-center text-white py-12">
-      <div class="inline-block animate-spin rounded-full h-8 w-8 border-4 border-white border-t-transparent mb-3"></div>
-      <p class="text-sm font-medium text-blue-100">Memuat data dari Google Spreadsheet...</p>
+      <div class="inline-block animate-spin rounded-full h-10 w-10 border-4 border-white border-t-transparent mb-3"></div>
+      <p class="text-base font-semibold">Memuat data dari Google Spreadsheet...</p>
     </div>
 
     <!-- Grid Aplikasi -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 hidden" id="appGrid"></div>
 
     <!-- Footer -->
-    <div class="text-center mt-12 text-xs text-blue-200 font-medium">
+    <div class="text-center mt-12 text-sm text-slate-200">
       &copy; SMP Negeri 1 Kandat. All rights reserved.
     </div>
   </div>
@@ -118,21 +125,40 @@
       sessionStorage.removeItem("isLoggedIn");
       document.getElementById("dashboardScreen").classList.add("hidden");
       document.getElementById("loginScreen").classList.remove("hidden");
-      document.body.className = "bg-blue-950 text-white min-h-screen flex flex-col justify-center items-center";
+      document.body.className = "bg-slate-700 min-h-screen flex flex-col justify-center items-center";
       document.getElementById("loginForm").reset();
     }
 
     function showDashboard() {
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("dashboardScreen").classList.remove("hidden");
-      document.body.className = "bg-blue-950 text-white min-h-screen py-6 px-4";
+      document.body.className = "bg-slate-700 min-h-screen py-6 px-4";
       loadApps();
     }
 
+    // Mengambil "#FEF3C7" dari teks seperti "#FEF3C7 (Kuning Soft)"
     function cleanHexColor(str) {
-      if (!str) return '#1e3a8a';
+      if (!str) return '#FFFFFF';
       const match = str.match(/#[0-9A-Fa-f]{6}/);
-      return match ? match[0] : '#1e3a8a';
+      return match ? match[0] : '#FFFFFF';
+    }
+
+    // Menentukan warna tulisan otomatis: gelap untuk latar terang, putih untuk latar gelap
+    function getTextColors(hex) {
+      const r = parseInt(hex.substr(1, 2), 16);
+      const g = parseInt(hex.substr(3, 2), 16);
+      const b = parseInt(hex.substr(5, 2), 16);
+      const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+      return luminance > 0.55
+        ? { title: '#0f172a', sub: '#1e293b', cta: '#0f172a' }
+        : { title: '#ffffff', sub: '#f1f5f9', cta: '#ffffff' };
+    }
+
+    // Mencegah teks dari spreadsheet merusak tampilan (HTML injection)
+    function escapeHtml(str) {
+      return String(str ?? '').replace(/[&<>"']/g, c => ({
+        '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+      }[c]));
     }
 
     async function loadApps() {
@@ -142,30 +168,32 @@
       try {
         const response = await fetch(SCRIPT_URL);
         const apps = await response.json();
-        
+
         gridContainer.innerHTML = '';
 
         if (!apps || apps.length === 0) {
-          loadingEl.innerHTML = '<p class="text-white">Belum ada data aplikasi di spreadsheet.</p>';
+          loadingEl.innerHTML = '<p class="text-white text-base font-semibold">Belum ada data aplikasi di spreadsheet.</p>';
           return;
         }
 
         apps.forEach(app => {
+          const bg = cleanHexColor(app.warna);
+          const colors = getTextColors(bg);
+
           const card = document.createElement('a');
           card.href = app.link || '#';
           card.target = '_blank';
-          card.className = 'p-6 rounded-2xl shadow-xl border border-blue-400/30 hover:shadow-2xl transition-all transform hover:-translate-y-1 block flex flex-col justify-between';
-          
-          card.style.backgroundColor = cleanHexColor(app.warna);
+          card.rel = 'noopener noreferrer';
+          card.className = 'p-6 rounded-2xl shadow-lg border border-black/10 hover:shadow-2xl transition-all transform hover:-translate-y-1 flex flex-col justify-between';
+          card.style.backgroundColor = bg;
 
-          // PENTING: Menggunakan style inline !important pada teks agar warna putih dan kuning selalu muncul dengan sangat jelas
           card.innerHTML = `
             <div>
-              <div class="text-4xl mb-4">${app.emoji || '🔗'}</div>
-              <h2 class="text-xl font-bold mb-2" style="color: #ffffff !important; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">${app.nama}</h2>
-              <p class="text-sm font-medium mb-2" style="color: #e2e8f0 !important; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">${app.subtitle || ''}</p>
+              <div class="text-5xl mb-4">${escapeHtml(app.emoji) || '🔗'}</div>
+              <h2 class="text-2xl font-extrabold mb-2 leading-snug" style="color:${colors.title}">${escapeHtml(app.nama)}</h2>
+              <p class="text-base font-medium leading-relaxed" style="color:${colors.sub}">${escapeHtml(app.subtitle)}</p>
             </div>
-            <div class="mt-6 text-xs font-bold flex items-center gap-1" style="color: #fde047 !important; text-shadow: 0 1px 2px rgba(0,0,0,0.8);">
+            <div class="mt-6 text-sm font-bold flex items-center gap-1" style="color:${colors.cta}">
               Buka Aplikasi &rarr;
             </div>
           `;
@@ -176,7 +204,7 @@
         gridContainer.classList.remove('hidden');
       } catch (error) {
         console.error('Gagal mengambil data:', error);
-        loadingEl.innerHTML = '<p class="text-white font-medium bg-red-600/80 p-4 rounded-xl">Gagal memuat data aplikasi.</p>';
+        loadingEl.innerHTML = '<p class="text-red-100 text-base font-semibold bg-red-900/60 p-4 rounded-xl">Gagal memuat data aplikasi.</p>';
       }
     }
   </script>

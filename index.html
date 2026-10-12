@@ -11,7 +11,7 @@
     }
   </style>
 </head>
-<body class="bg-slate-600 min-h-screen flex flex-col justify-center items-center">
+<body class="bg-slate-700 min-h-screen flex flex-col justify-center items-center">
 
   <!-- ================= LAYAR LOGIN ================= -->
   <div id="loginScreen" class="w-full max-w-md p-6 sm:p-8 bg-white rounded-3xl shadow-2xl mx-4 my-8">
@@ -91,17 +91,14 @@
   </div>
 
   <script>
-    // URL Google Apps Script milik Anda
     const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzJIu0weg6REkQ9TWN1EEc9G8gaeHj9KLpm_KQ5N2DdT3WzroP-No-m5eZLgA9bec4/exec";
 
-    // Cek Sesi Login saat Halaman Dimuat
     document.addEventListener("DOMContentLoaded", function() {
       if (sessionStorage.getItem("isLoggedIn") === "true") {
         showDashboard();
       }
     });
 
-    // Fungsi Proses Login
     function handleLogin(event) {
       event.preventDefault();
       const user = document.getElementById("username").value.trim();
@@ -117,16 +114,14 @@
       }
     }
 
-    // Fungsi Logout
     function handleLogout() {
       sessionStorage.removeItem("isLoggedIn");
       document.getElementById("dashboardScreen").classList.add("hidden");
       document.getElementById("loginScreen").classList.remove("hidden");
-      document.body.className = "bg-slate-600 min-h-screen flex flex-col justify-center items-center";
+      document.body.className = "bg-slate-700 min-h-screen flex flex-col justify-center items-center";
       document.getElementById("loginForm").reset();
     }
 
-    // Tampilkan Dashboard & Ambil Data Aplikasi
     function showDashboard() {
       document.getElementById("loginScreen").classList.add("hidden");
       document.getElementById("dashboardScreen").classList.remove("hidden");
@@ -134,7 +129,13 @@
       loadApps();
     }
 
-    // Fetch Data dari Google Apps Script
+    // Pembersih kode warna (mengambil "#FEF3C7" dari "#FEF3C7 (Kuning Soft)")
+    function cleanHexColor(str) {
+      if (!str) return '#FFFFFF';
+      const match = str.match(/#[0-9A-Fa-f]{6}/);
+      return match ? match[0] : '#FFFFFF';
+    }
+
     async function loadApps() {
       const gridContainer = document.getElementById('appGrid');
       const loadingEl = document.getElementById('loading');
@@ -154,16 +155,18 @@
           const card = document.createElement('a');
           card.href = app.link || '#';
           card.target = '_blank';
-          card.className = 'p-6 rounded-2xl shadow-md border border-black/5 hover:shadow-xl transition-all transform hover:-translate-y-1 block flex flex-col justify-between';
-          card.style.backgroundColor = app.warna || '#FFFFFF';
+          card.className = 'p-6 rounded-2xl shadow-lg border border-black/5 hover:shadow-2xl transition-all transform hover:-translate-y-1 block flex flex-col justify-between';
+          
+          // Menggunakan warna yang sudah dibersihkan
+          card.style.backgroundColor = cleanHexColor(app.warna);
 
           card.innerHTML = `
             <div>
               <div class="text-4xl mb-4">${app.emoji || '🔗'}</div>
-              <h2 class="text-xl font-bold text-slate-800 mb-2">${app.nama}</h2>
-              <p class="text-sm text-slate-700">${app.subtitle || ''}</p>
+              <h2 class="text-xl font-bold text-slate-900 mb-2">${app.nama}</h2>
+              <p class="text-sm text-slate-700 font-medium mb-2">${app.subtitle || ''}</p>
             </div>
-            <div class="mt-6 text-xs font-bold text-slate-800/80 flex items-center gap-1">
+            <div class="mt-6 text-xs font-bold text-slate-900 flex items-center gap-1">
               Buka Aplikasi &rarr;
             </div>
           `;
@@ -174,7 +177,7 @@
         gridContainer.classList.remove('hidden');
       } catch (error) {
         console.error('Gagal mengambil data:', error);
-        loadingEl.innerHTML = '<p class="text-red-200 font-medium bg-red-900/50 p-4 rounded-xl">Gagal memuat data aplikasi. Pastikan koneksi dan izin Google Apps Script sudah benar.</p>';
+        loadingEl.innerHTML = '<p class="text-red-200 font-medium bg-red-900/50 p-4 rounded-xl">Gagal memuat data aplikasi.</p>';
       }
     }
   </script>
